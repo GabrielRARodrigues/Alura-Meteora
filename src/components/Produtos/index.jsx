@@ -1,14 +1,20 @@
-import React from "react";
-import Produto from "./Produto";
-import produtos from "@/mocks/produtos.json";
-import Titulo from "@/components/Titulo";
+import { useContext } from 'react'
 
-const Produtos = ({ adicionarProduto }) => {
+import { CarrinhoContext } from '@/context/CarrinhoContext'
+
+import Produto from './Produto'
+import Titulo from '@/components/Titulo'
+
+import produtos from '@/mocks/produtos.json'
+
+const Produtos = () => {
+  const { adicionarProduto } = useContext(CarrinhoContext)
+
   return (
     <section role="produtos" aria-label="Produtos que estão bombando!">
       <Titulo>Produtos que estão bombando!</Titulo>
       <div className="container row mx-auto">
-        {produtos.map((produto) => (
+        {produtos.map(produto => (
           <Produto
             key={produto.id}
             {...produto}
@@ -17,7 +23,7 @@ const Produtos = ({ adicionarProduto }) => {
         ))}
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Produtos;
+export default Produtos
