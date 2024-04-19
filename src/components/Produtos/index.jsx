@@ -1,6 +1,4 @@
-import { useContext } from 'react'
-
-import { CarrinhoContext } from '@/context/CarrinhoContext'
+import { useCarrinhoContext } from '../../hooks/useCarrinhoContext'
 
 import Produto from './Produto'
 import Titulo from '@/components/Titulo'
@@ -8,7 +6,7 @@ import Titulo from '@/components/Titulo'
 import produtos from '@/mocks/produtos.json'
 
 const Produtos = () => {
-  const { adicionarProduto } = useContext(CarrinhoContext)
+  const { adicionarProduto } = useCarrinhoContext()
 
   return (
     <section role="produtos" aria-label="Produtos que estão bombando!">
