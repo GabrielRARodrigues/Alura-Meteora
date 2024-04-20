@@ -1,9 +1,11 @@
-import React from "react";
+import { useCarrinhoContext } from '../../../hooks/useCarrinhoContext'
 
-import imagemCarrinho from "/assets/cart.svg";
+import imagemCarrinho from '/assets/cart.svg'
 
-const BotaoCarrinho = ({ className, quantidadeProdutos }) => {
-  const classesComuns = "btn ms-3";
+const BotaoCarrinho = ({ className }) => {
+  const classesComuns = 'btn ms-3'
+
+  const { quantidade } = useCarrinhoContext()
 
   return (
     <button
@@ -14,11 +16,11 @@ const BotaoCarrinho = ({ className, quantidadeProdutos }) => {
       aria-controls="modalCarrinhoSuspenso"
     >
       <img src={imagemCarrinho} alt="ícone de um carrinho de supermercado" />
-      {quantidadeProdutos !== 0 && (
-        <span className="badge verde-limao">{quantidadeProdutos}</span>
+      {quantidade !== 0 && (
+        <span className="badge verde-limao">{quantidade}</span>
       )}
     </button>
-  );
-};
+  )
+}
 
-export default BotaoCarrinho;
+export default BotaoCarrinho
