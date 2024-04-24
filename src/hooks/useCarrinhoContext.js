@@ -1,41 +1,33 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 
 import { CarrinhoContext } from '@/context/CarrinhoContext'
+import {
+  ADD_PRODUTO,
+  REMOVE_PRODUTO,
+  UPDATE_QUANTIDADE
+} from '../reducers/carrinhoReducer'
+
+const addProductAction = novoProduto => ({
+  type: ADD_PRODUTO,
+  payload: novoProduto
+})
+
+const removeProductAction = produtoId => ({
+  type: REMOVE_PRODUTO,
+  payload: produtoId
+})
+
+const updateQuantityAction = (produtoId, quantidade) => ({
+  type: UPDATE_QUANTIDADE,
+  payload: { produtoId, quantidade }
+})
 
 export const useCarrinhoContext = () => {
-  const {
-    carrinho,
-    setCarrinho,
-    quantidade,
-    setQuantidade,
-    valorTotal,
-    setValorTotal
-  } = useContext(CarrinhoContext)
-
-  function mudarQuantidade(id, quantidade) {
-    return carrinho.map(itemDoCarrinho => {
-      if (itemDoCarrinho.id === id) {
-        itemDoCarrinho.quantidade += quantidade
-      }
-
-      return itemDoCarrinho
-    })
-  }
+  const { carrinho, dispatch, quantidade, valorTotal } =
+    useContext(CarrinhoContext)
 
   function adicionarProduto(novoProduto) {
-    const temOProduto = carrinho.some(
-      itemDoCarrinho => itemDoCarrinho.id === novoProduto.id
-    )
-
-    if (!temOProduto) {
-      novoProduto.quantidade = 1
-
-      return setCarrinho(carrinhoAnterior => [...carrinhoAnterior, novoProduto])
-    }
-
-    const carrinhoAtualizado = mudarQuantidade(novoProduto.id, 1)
-
-    setCarrinho([...carrinhoAtualizado])
+    dispatch(addProductAction(novoProduto))
   }
 
   function removerProduto(idDoProduto) {
@@ -43,48 +35,18 @@ export const useCarrinhoContext = () => {
       itemDoCarrinho => itemDoCarrinho.id === idDoProduto
     )
 
-    if (!produtoASerRemovido) {
-      return
-    }
-
-    const ultimoProduto = produtoASerRemovido.quantidade === 1
-
-    if (ultimoProduto) {
-      return setCarrinho(carrinhoAnterior =>
-        carrinhoAnterior.filter(
-          itemDoCarrinho => itemDoCarrinho.id !== idDoProduto
-        )
+    if (produtoASerRemovido && produtoASerRemovido.quantidade > 1) {
+      dispatch(
+        updateQuantityAction(idDoProduto, produtoASerRemovido.quantidade - 1)
       )
+    } else {
+      dispatch(removeProductAction(id))
     }
-
-    const carrinhoAtualizado = mudarQuantidade(idDoProduto, -1)
-
-    setCarrinho([...carrinhoAtualizado])
   }
 
   function removerProdutoCarrinho(id) {
-    const produtosAtualizados = carrinho.filter(
-      itemDoCarrinho => itemDoCarrinho.id !== id
-    )
-
-    setCarrinho([...produtosAtualizados])
+    dispatch(removeProductAction(id))
   }
-
-  useEffect(() => {
-    const { totalTemp, quantidadeTemp } = carrinho.reduce(
-      (acumulador, produto) => ({
-        quantidadeTemp: acumulador.quantidadeTemp + produto.quantidade,
-        totalTemp: acumulador.totalTemp + produto.preco * produto.quantidade
-      }),
-      {
-        quantidadeTemp: 0,
-        totalTemp: 0
-      }
-    )
-
-    setQuantidade(quantidadeTemp)
-    setValorTotal(totalTemp)
-  }, [carrinho])
 
   return {
     carrinho,

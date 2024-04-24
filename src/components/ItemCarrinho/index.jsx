@@ -1,15 +1,13 @@
-import React from "react";
-import Botao from "@/components/Botao";
-import Quantidade from "@/components/Quantidade";
-import ValorFormatado from "@/components/ValorFormatado";
-import InfoItemCarrinho from "./InfoItemCarrinho";
+import { useCarrinhoContext } from '../../hooks/useCarrinhoContext'
 
-const ItemCarrinho = ({
-  itemCarrinho,
-  removerProdutoCarrinho,
-  adicionarProduto,
-  removerProduto,
-}) => {
+import Botao from '@/components/Botao'
+import Quantidade from '@/components/Quantidade'
+import ValorFormatado from '@/components/ValorFormatado'
+import InfoItemCarrinho from './InfoItemCarrinho'
+
+const ItemCarrinho = ({ itemCarrinho }) => {
+  const { removerProdutoCarrinho } = useCarrinhoContext()
+
   return (
     <li key={itemCarrinho.id}>
       <>
@@ -21,11 +19,7 @@ const ItemCarrinho = ({
           />
           <InfoItemCarrinho itemCarrinho={itemCarrinho} />
           <ValorFormatado valor={itemCarrinho.preco} />
-          <Quantidade
-            itemCarrinho={itemCarrinho}
-            adicionarProduto={adicionarProduto}
-            removerProduto={removerProduto}
-          />
+          <Quantidade itemCarrinho={itemCarrinho} />
           <Botao
             variant="deleteItem"
             aria-label="Excluir"
@@ -37,7 +31,7 @@ const ItemCarrinho = ({
         <div className="divisor my-5" />
       </>
     </li>
-  );
-};
+  )
+}
 
-export default ItemCarrinho;
+export default ItemCarrinho
